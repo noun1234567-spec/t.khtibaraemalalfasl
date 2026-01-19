@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>اختبار التحرير العربي - جامعة القصيم</title>
+
+<style>
+/* ===================== ROOT COLORS ===================== */
+:root{
+  --p:#933768;
+  --p-light:#b44a86;
+  --p-soft:#f8e8f1;
+  --s:#2ecc71;
+  --e:#e74c3c;
+  --bg:#faf9fb;
+  --card:#ffffff;
+}
+
+/* ===================== GLOBAL ===================== */
+body{
+  font-family:'Segoe UI', Tahoma;
+  background:var(--bg);
+  margin:0;
+  direction:rtl;
+  line-height:1.7;
+  color:#333;
+}
+
+.header{
+  background:var(--p);
+  color:#fff;
+  padding:16px;
+  text-align:center;
+  font-size:1.6em;
+  font-weight:bold;
+  letter-spacing:0.5px;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.timer-box{
+  background:#fff3cd;
+  color:#856404;
+  padding:12px;
+  text-align:center;
+  font-size:1.15em;
+  font-weight:bold;
+  border-bottom:1px solid #f0e6c5;
+}
+
+.box{
+  background:var(--card);
+  max-width:1000px;
+  margin:30px auto 150px;
+  padding:30px;
+  border-radius:16px;
+  box-shadow:0 8px 30px rgba(0,0,0,.08);
+  animation:fadeIn .7s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* العبارة الإرشادية */
+.intro-text {
+  color: var(--p);
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 15px;
+  display: block;
+  border-right: 4px solid var(--p);
+  padding-right: 10px;
+}
+
+/* ===================== SECTION TITLES ===================== */
+.sec-title{
+  background:var(--p);
+  color:#fff;
+  padding:12px 20px;
+  border-radius:10px;
+  margin:20px 0 18px;
+  font-weight:bold;
+  font-size:1.15em;
+  box-shadow:0 3px 10px rgba(147,55,104,.25);
+}
+
+/* ===================== QUESTION ROWS ===================== */
+.q-row{
+  display:flex;
+  gap:12px;
+  padding:12px 12px;
+  border-bottom:1px solid #eee;
+  align-items:center;
+  transition:background .2s;
+  border-radius:8px;
+}
+
+.q-row:hover{
+  background:var(--p-soft);
+}
+
+.q-text {
+  margin-left: 15px; 
+}
+
+.btn-small{
+  padding:6px 16px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  cursor:pointer;
+  background:#fff;
+  transition:.25s;
+  font-size:.95em;
+  white-space: nowrap;
+}
+
+.btn-small:hover{
+  background:#f7f7f7;
+  transform:translateY(-2px);
+}
+
+.correct{ background:var(--s)!important; color:#fff!important; border-color:var(--s)!important; }
+.wrong{ background:var(--e)!important; color:#fff!important; border-color:var(--e)!important; }
+
+.end-msg {
+  margin:25px 0 10px;
+  padding:12px;
+  text-align:center;
+  font-weight:bold;
+  color:#8E3B1F;
+  background:#fdf1ec;
+  border:1px dashed #8E3B1F;
+  border-radius:8px;
+}
+
+/* ===================== QUESTION 3 (COMPACTED) ===================== */
+.table-container {
+  width: 85%;
+  margin: 0 auto 20px;
+  overflow-x: auto;
+}
+
+#words-table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+#words-table td{
+  border:1px solid #ddd;
+  padding:6px;
+  font-size:15px;
+  text-align:center;
+}
+
+.word-cell{
+  width:15%;
+  background:#fdf2f8;
+  font-weight:bold;
+}
+
+.input-cell{
+  width:10%;
+}
+
+.spaced-word{
+  color:var(--p);
+  font-weight:bold;
+  font-size:18px;
+}
+
+#words-table input{
+  width:100%;
+  padding:6px;
+  font-size:14px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* زر تصحيح السؤال الثالث */
+#checkBtn{
+  padding:10px 20px; 
+  border:none; 
+  border-radius:10px; 
+  cursor:pointer; 
+  font-size:1em;
+  background:#e0c3d7;   /* لون خافت افتراضي */
+  color:#fff;
+  transition:.25s;
+}
+
+#checkBtn.ready{
+  background:var(--p);   /* لون واضح عند الجاهزية */
+}
+
+#checkBtn:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
+
+/* ===================== QUESTION 4 ===================== */
+
+.word-pool{
+  display:flex; 
+  gap:12px; 
+  flex-wrap:wrap; 
+  justify-content:center;
+  padding:20px; 
+  background:#fdf5f0; 
+  border-radius:14px; 
+  border:1px dashed var(--p);
+}
+
+.word-card{
+  background:var(--p); 
+  color:#fff; 
+  padding:8px 18px; 
+  border-radius:18px;
+  cursor:grab; 
+  font-size:.9em; 
+  transition:.25s;
+}
+
+/* ألوان بعد التقييم */
+.word-correct {
+  background:#d4edda!important;  /* أخضر فاتح */
+  color:#155724!important;
+}
+
+.word-wrong {
+  background:#f8d7da!important;  /* أحمر فاتح */
+  color:#721c24!important;
+}
+
+/* شبكة الصناديق */
+.match-grid{ 
+  display:grid; 
+  grid-template-columns:repeat(6,1fr); 
+  gap:14px; 
+  margin-top:20px; 
+}
+
+.drop-bucket{
+  border:1.5px dashed var(--p); 
+  border-radius:12px; 
+  min-height:120px;
+  padding:12px; 
+  text-align:center; 
+  font-size:.85em; 
+  background:#fff;
+}
+
+/* حاوية محتوى الكلمات داخل الصندوق */
+.bucket-content{
+  margin-top:8px;
+}
+
+/* منع إعادة الاستخدام دون إخفاء الكلمة */
+.used{
+  cursor:not-allowed;
+}
+
+/* ===================== RESULT BAR ===================== */
+.res-bar{
+  position:fixed; 
+  bottom:0; 
+  left:0; 
+  right:0; 
+  background:#2c3e50;
+  color:#fff; 
+  text-align:center; 
+  padding:20px; 
+  font-size:1.15em;
+}
+
+.res-bar button{
+  margin-right:10px; 
+  padding:8px 16px; 
+  border:none; 
+  border-radius:8px;
+  background:var(--p); 
+  color:#fff; 
+  cursor:pointer;
+}
+
+.correct-input{ background:#d4edda!important; }
+.incorrect-input{ background:#f8d7da!important; }
+</style>
+</head>
+
+<body>
+
+<div class="header">الاختبار الأول لأعمال الفصل في (الوحدتين الأولى والثانية) لمقرر التحرير العربي (١٠3 عرب) ط4</div>
+<div class="timer-box">الوقت المتبقي: <span id="timer">30:00</span></div>
+
+<div class="box">
+
+  <span class="intro-text">
+    اقرأ الأسئلة جيدًا واختر الإجابات الصحيحة خلال الوقت المحدد، مع إمكانية إعادة الاختبار.
+  </span>
+
+  <!-- السؤال الأول -->
+  <div class="sec-title">السؤال الأول: أجب بصح أو خطأ. (4 درجات)</div>
+  <div id="tf-area"></div>
+
+  <!-- السؤال الثاني -->
+  <div class="sec-title">السؤال الثاني: اختر الإجابة الصحيحة. (4 درجات)</div>
+  <div id="mcq-area"></div>
+
+  <!-- السؤال الثالث -->
+  <div class="sec-title">السؤال الثالث: أعد كتابة الكلمات الآتية متصلة الأحرف حسب القواعد الإملائيّة. (6 درجات)</div>
+  <div class="table-container">
+    <table id="words-table"><tbody></tbody></table>
+  </div>
+
+  <div style="text-align:center">
+    <button id="checkBtn" disabled>
+      تصحيح الإجابات
+    </button>
+  </div>
+
+  <!-- السؤال الرابع (مطابقة) -->
+  <div class="sec-title">السؤال الرابع: المطابقة (6 درجات)</div>
+  <div class="word-pool" id="pool"></div>
+  <div class="match-grid" id="buckets"></div>
+
+  <div class="end-msg">
+    (انتهت الأسئلة؛ راجع إجاباتك بدقة لضمان أفضل فائدة مستقبلًا)
+  </div>
+
+</div>
+
+<div class="res-bar">
+  الدرجة النهائية: <span id="score">0</span> / 20
+  <button onclick="location.reload()">إعادة الاختبار</button>
+  <button onclick="window.print()">طباعة الاختبار</button>
+</div>
+
+<script>
+/* ===================== دالة خلط عامة ===================== */
+function shuffle(array){
+  for(let i = array.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+/* ===================== الدرجات والوقت ===================== */
+let score = 0;
+function updateFinalScore(v){
+  score += v;
+  document.getElementById("score").textContent = score.toFixed(2);
+}
+
+let timeLeft = 1800;
+setInterval(()=>{
+  let m = Math.floor(timeLeft/60), s = timeLeft % 60;
+  document.getElementById("timer").textContent = `${m}:${s<10?'0'+s:s}`;
+  timeLeft--;
+},1000);
+
+/* ===================== دالة بناء الأسئلة (صح/خطأ + اختيار من متعدد) ===================== */
+function build(area, qs, pointPerQ){
+  const el = document.getElementById(area);
+  qs.forEach(q=>{
+    const row = document.createElement("div");
+    row.className = "q-row";
+    row.innerHTML = `<div class="q-text">${q.q}</div>`;
+    q.o.forEach((o,i)=>{
+      const b = document.createElement("div");
+      b.className = "btn-small";
+      b.textContent = o;
+      b.onclick = ()=>{
+        if(row.dataset.done) return;
+        row.dataset.done = 1;
+        if(i === q.a){ 
+          b.classList.add("correct"); 
+          updateFinalScore(pointPerQ); 
+        } else { 
+          b.classList.add("wrong"); 
+        }
+      };
+      row.appendChild(b);
+    });
+    el.appendChild(row);
+  });
+}
+
+/* ===================== السؤال الأول: صح وخطأ (عشوائي) ===================== */
+let tfQuestions = [
+  {q:"- تُكتب همزة القطع أوّل الكلمة على الألف بحسب حركتها: (أُ) للضم، (أَ) للفتح، (أِ) للكسر.",o:["صح","خطأ"],a:1},
+  {q:"- (فُ ءُ ا د) الهمزة متوسطة ومفتوحة وما قبلها مضموم، والضمّة أقوى من الفتحة، فتُكتب  (فُؤَاد).",o:["صح","خطأ"],a:0},
+  {q:"- تاء التأنيث المربوطة (ـة ة) لا تلحق الفعل ولا الحرف، وإنما تلحق الاسم فقط.",o:["صح","خطأ"],a:0},
+  {q:"- تجتمع (الظاء والضاد) في كلمة واحدة، وقد أتت معًا في كثير من الكلمات العربية.",o:["صح","خطأ"],a:1}
+];
+tfQuestions = shuffle(tfQuestions);
+build("tf-area", tfQuestions, 1);
+
+/* ===================== السؤال الثاني: اختيار من متعدد (عشوائي) ===================== */
+let mcqQuestions = [
+  {q:"- الكلمة التي فيها حرف زائد كتابةً، هي:", o: ["الرحمن", "هذا", "عمرو", "لكن"], a: 2},
+  {q:"- الجملة التي كتبت بشكل صحيح هي:", o: ["أنتي مجتهدة", "أنت مجتهده", "انت مجتهدة", "أنت مجتهدة"], a: 3},
+  {q:"- الكتابة الصحيحة لجمع المفردات (الراعي - كاتب - ماء):", o: ["الرعاة، كتبة، مياه", "الرعاه، كتبة، مياه", "الرعاة، كتبه، مياه", "الرعاة، كتبة، مياة"], a: 0},
+  {q:"- أفعال الأمر من (أَخرَجَ - نَصَرَ - اِستَغْفَرَ) التي كتبت كلها بشكل صحيح هي:", o: ["اخرج - انصر - استغْفِرْ", "أخرِجْ - أنصُرْ - استغْفِرْ", "أخرِجْ - انصُرْ - إستغْفِرْ", "أخرِجْ - انصر - استغْفِرْ"], a: 3},
+  {q:"- الألف التي كتبت في غير محلها، وتُعدّ كتابتها خطأ إملائيًا:", o: ["المسلمون دعوا", "نحن ندعوا", "اجتهدوا", "الطلاب صبروا"], a: 1},
+  {q:"- الجملة التي كتبت بشكل صحيح هي:", o: ["انا مسرور", "كتبه ابن المقفع", "أكرمت ظيفي", "زارني مساءًا"], a: 1},
+  {q:"- الخط المرن الذي يجمع بين السهولة والجمال، ويمتاز بسرعة الأداء ولا يلتزم بالتشكيل إلا في الآيات الكريمة هو:", o: ["خط النسخ", "خط الرقعة", "الخط الثلث", "الخط الكوفي"], a: 1},
+  {q:"- تُستخدم الشرطتان (- -) لـ:", o: ["جملة مقول القول", "الجملة التعجبية", "الجمل الاعتراضية", "الجملة الاستفهامية"], a: 2},
+];
+mcqQuestions = shuffle(mcqQuestions);
+build("mcq-area", mcqQuestions, 0.5);
+
+/* ===================== السؤال الثالث: إعادة كتابة الكلمات (عشوائي + زر متدرج اللون) ===================== */
+let items = [
+  { spaced:"دَ ا فِ ء", answer:"دافئ" }, 
+  { spaced:"يَ تَ ثَ ا ءَ ب", answer:"يتثاءب" },
+  { spaced:"يَ عْ بَ ءُ", answer:"يعبأ" }, 
+  { spaced:"تَ وَ ا طُ ء", answer:"تواطؤ" },
+  { spaced:"إِ مْ لَ ا ء", answer:"إملاء" }, 
+  { spaced:"وُ ضُ و ءْ", answer:"وضوء" },
+  { spaced:"سُ وْ ء", answer:"سوء" }, 
+  { spaced:"أَ سْ وَ ءُ", answer:"أسوأ" },
+  { spaced:"ا سْ تَ وَ (ا/ى)", answer:"استوى" }, 
+  { spaced:"رَ مَ (ا/ى)", answer:"رمى" },
+  { spaced:"جَ رِ ي ءٌ", answer:"جريء" }, 
+  { spaced:"تَ هْ يِ ئَ ة", answer:"تهيئة" }
+];
+items = shuffle(items);
+
+const tbody = document.querySelector("#words-table tbody");
+const checkBtn = document.getElementById("checkBtn");
+
+function buildTable(){
+  let row = null;
+  items.forEach((item,index)=>{
+    if(index % 4 === 0){
+      row = document.createElement("tr");
+      tbody.appendChild(row);
+    }
+    const cellWord = document.createElement("td");
+    cellWord.className = "word-cell";
+    cellWord.innerHTML = `<span class="spaced-word">${item.spaced}</span>`;
+    row.appendChild(cellWord);
+
+    const cellInput = document.createElement("td");
+    cellInput.className = "input-cell";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.setAttribute("data-answer", item.answer);
+    input.addEventListener("input", checkFilled);
+    cellInput.appendChild(input);
+    row.appendChild(cellInput);
+  });
+}
+buildTable();
+
+function checkFilled(){
+  const inputs = document.querySelectorAll("#words-table input");
+  const filledCount = Array.from(inputs).filter(inp => inp.value.trim() !== "").length;
+  const allFilled = filledCount === inputs.length;
+
+  if (filledCount > 0) {
+    // بدأ الطالب في الإجابة: لون خافت لكن الزر ما يزال معطلاً حتى الاكتمال
+    checkBtn.classList.add("ready");
+  } else {
+    checkBtn.classList.remove("ready");
+  }
+
+  checkBtn.disabled = !allFilled;
+}
+
+checkBtn.onclick = ()=>{
+  const inputs = document.querySelectorAll("#words-table input");
+  inputs.forEach(input=>{
+    if(normalize(input.value) === normalize(input.getAttribute("data-answer"))){
+      input.classList.add("correct-input"); 
+      updateFinalScore(0.5);
+    } else { 
+      input.classList.add("incorrect-input"); 
+    }
+    input.disabled = true;
+  });
+  // بعد التصحيح: يصبح الزر غير نشط
+  checkBtn.disabled = true;
+};
+
+function normalize(str){
+  return str.trim()
+    .replace(/\s+/g,"")                 // إزالة المسافات
+    .replace(/[ًٌٍَُِّْ]/g,"")          // إزالة جميع التشكيل (فتحة، ضمة، كسرة، تنوين، سكون، شدة)
+    .replace(/[أإآ]/g,"ا")              // توحيد الألفات المهموزة
+    .replace(/ة/g,"ه")                  // توحيد التاء المربوطة
+    .replace(/ى/g,"ي");                 // توحيد الألف المقصورة
+}
+
+/* ===================== السؤال الرابع: المطابقة (عشوائي) ===================== */
+
+// الكلمات مع أرقام مجموعاتها
+
+let words = [
+  ["هل جاء أحمد...",1],
+  ["لماذا تأخرتَ...",1],
+  ["صحيح مسلم: 2... 124",2],
+  ["ولد في: 19...5...1445هـ",2],
+  ["من ص ( ٤٠ ... ٦٠ )",3],
+  ["غاب: 1...إبراهيم. 2... سالم",3],
+  ["شكرًا لك...",4],
+  ["هل تنتظر الخير من الكسل؟...",4],
+  ["يا محمد... أعطني الكتاب.",5],
+  ["هل قرأت المقال؟ نعم... قرأته أمس.",5],
+  ["قرأت كتابين في شهر...",6]
+];
+
+// خلط ترتيب الكلمات
+words = shuffle(words);
+
+// أسماء الصناديق
+const bucketTitles = [
+  "علامة استفهام(؟)",
+  "الشرطة المائلة (/)",
+  "الشرطة (-)",
+  "علامة التأثر والانفعال (!)",
+  "الفاصلة (،)",
+  "النقطة (.)"
+];
+
+// إنشاء المسبح
+const pool = document.getElementById("pool");
+words.forEach((w,i)=>{
+  const d = document.createElement("div");
+  d.className = "word-card";
+  d.textContent = w[0];
+  d.draggable = true;
+  d.dataset.group = w[1];  // رقم المجموعة الصحيحة
+  d.dataset.id = i;        // معرّف فريد
+  d.ondragstart = e => e.dataTransfer.setData("id", i);
+  pool.appendChild(d);
+});
+
+// إنشاء الصناديق
+const bucketsContainer = document.getElementById("buckets");
+
+for(let i=1; i<=6; i++){
+  const b = document.createElement("div");
+  b.className = "drop-bucket";
+  b.dataset.group = i;
+
+  // عنوان الصندوق
+  const title = document.createElement("div");
+  title.innerHTML = `<strong>${bucketTitles[i-1]}</strong>`;
+
+  // حاوية الكلمات المسحوبة
+  const content = document.createElement("div");
+  content.className = "bucket-content";
+
+  b.appendChild(title);
+  b.appendChild(content);
+
+  // السحب والإفلات
+  b.ondragover = e => e.preventDefault();
+  b.ondrop = e => {
+    const id = e.dataTransfer.getData("id");
+    const w = document.querySelector(`[data-id="${id}"]`);
+    if(!w || w.classList.contains('used')) return; // لا تكرر الكلمة
+    w.classList.add('used');
+
+    const line = document.createElement("div");
+    if(w.dataset.group == b.dataset.group){
+      line.style.color = "var(--s)";
+      line.textContent = `✔ ${w.textContent}`;
+      updateFinalScore(0.5); // 12 كلمة × 0.5 = 6 درجات
+
+      // تلوين بطاقة الكلمة (أخضر فاتح)
+      w.classList.remove('word-wrong');
+      w.classList.add('word-correct');
+    } else {
+      line.style.color = "var(--e)";
+      line.textContent = `✘ ${w.textContent}`;
+
+      // تلوين بطاقة الكلمة (أحمر فاتح)
+      w.classList.remove('word-correct');
+      w.classList.add('word-wrong');
+    }
+    content.appendChild(line);
+  };
+
+  bucketsContainer.appendChild(b);
+}
+</script>
+</body>
+</html>
